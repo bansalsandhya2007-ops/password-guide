@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Personality Guide</title>
+    <style>
+        :root {
+            --bg-color: #0d0e15;
+            --card-bg: #161824;
+            --accent-color: #6366f1;
+            --accent-hover: #4f46e5;
+            --text-color: #e2e8f0;
+            --text-muted: #94a3b8;
+            --gold: #f59e0b;
+            --border-color: #26293b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+        }
+
+        .logo-key {
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 10px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Quiz Status */
+        .quiz-status {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-color), var(--gold));
+            transition: width 0.3s ease;
+        }
+
+        /* Question Cards */
+        .question-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-size: 1rem;
+        }
+
+        .option-btn:hover {
+            background: rgba(99, 102, 241, 0.15);
+            border-color: var(--accent-color);
+            transform: translateX(4px);
+        }
+
+        .option-btn.selected {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+
+        /* Navigation Buttons */
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+            justify-content: space-between;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:disabled {
+            background: var(--text-muted);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Results Screen */
+        .results-container {
+            display: none;
+            animation: slideIn 0.5s ease;
+        }
+
+        .results-container.show {
+            display: block;
+        }
+
+        .result-card {
+            background: var(--card-bg);
+            border: 2px solid var(--accent-color);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 8px 12px rgba(99, 102, 241, 0.2);
+        }
+
+        .result-emoji {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .result-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--gold);
+        }
+
+        .result-description {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .traits-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .trait {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        /* Hidden Class */
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .logo-key {
+                font-size: 2rem;
+            }
+
+            .question-text {
+                font-size: 1.1rem;
+            }
+
+            .quiz-status {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .traits-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-key">🔐</div>
+            <h1>Password Personality Guide</h1>
+            <p class="subtitle">Discover your password personality type</p>
+            <span class="badge">Interactive Quiz</span>
+        </header>
+
+        <!-- Quiz Screen -->
+        <div id="quizScreen">
+            <div class="quiz-status">
+                <div>
+                    <span id="questionNumber">Question 1</span> of <span id="totalQuestions">10</span>
+                </div>
+                <div style="text-align: right;">
+                    <div id="progressPercent">0%</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text" id="questionText"></div>
+                <div class="options-list" id="optionsList"></div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()">← Previous</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>Next →</button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="results-container" id="resultsScreen">
+            <div class="result-card">
+                <div class="result-emoji" id="resultEmoji"></div>
+                <div class="result-title" id="resultTitle"></div>
+                <div class="result-description" id="resultDescription"></div>
+                
+                <div style="margin-top: 20px; text-align: left;">
+                    <h3 style="margin-bottom: 15px; color: var(--gold);">Key Traits:</h3>
+                    <div class="traits-list" id="traitsList"></div>
+                </div>
+
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+                    <h3 style="margin-bottom: 15px; color: var(--gold);">Password Recommendations:</h3>
+                    <div id="recommendations" style="text-align: left; color: var(--text-muted); line-height: 1.8;"></div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="restartQuiz()">Take Quiz Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Quiz Data
+        const quizData = [
+            {
+                question: "How do you usually create passwords?",
+                options: [
+                    "Random mix of everything",
+                    "Based on memorable dates/numbers",
+                    "Using a pattern or system",
+                    "Password manager suggestion"
+                ]
+            },
+            {
+                question: "When faced with a password rule, what's your reaction?",
+                options: [
+                    "Follow it precisely",
+                    "Try to find a workaround",
+                    "Use the minimum required",
+                    "Adapt creatively"
+                ]
+            },
+            {
+                question: "How often do you change your passwords?",
+                options: [
+                    "Very frequently",
+                    "Only when prompted",
+                    "Never unless required",
+                    "Based on importance"
+                ]
+            },
+            {
+                question: "What's your password recovery method?",
+                options: [
+                    "Remember it mentally",
+                    "Write it down safely",
+                    "Use password manager",
+                    "Email recovery link"
+                ]
+            },
+            {
+                question: "How complex do you prefer your passwords?",
+                options: [
+                    "Simple and memorable",
+                    "Complex but manageable",
+                    "Extremely complex",
+                    "Whatever the system demands"
+                ]
+            },
+            {
+                question: "Your approach to password sharing?",
+                options: [
+                    "Never share passwords",
+                    "Share only with trusted people",
+                    "Use team credentials",
+                    "One-time access links"
+                ]
+            },
+            {
+                question: "What frustrates you most about passwords?",
+                options: [
+                    "Remembering them",
+                    "Changing them constantly",
+                    "Security requirements",
+                    "Nothing really"
+                ]
+            },
+            {
+                question: "Your security awareness level?",
+                options: [
+                    "High - I'm very cautious",
+                    "Medium - I care but not obsessive",
+                    "Low - It's just passwords",
+                    "Expert - I use advanced methods"
+                ]
+            },
+            {
+                question: "How do you feel about biometric authentication?",
+                options: [
+                    "Love it - convenient",
+                    "It's okay",
+                    "Prefer traditional passwords",
+                    "Mix of both is best"
+                ]
+            },
+            {
+                question: "Your password philosophy in one word?",
+                options: [
+                    "Cautious",
+                    "Practical",
+                    "Creative",
+                    "Secure"
+                ]
+            }
+        ];
+
+        // Personality Results
+        const personalityTypes = {
+            "Guardian": {
+                emoji: "🛡️",
+                title: "The Guardian",
+                description: "You are the security-first user who takes password management seriously. You follow best practices, use strong passwords, and prioritize protection over convenience.",
+                traits: ["Security Conscious", "Rule Follower", "Protective", "Cautious", "Reliable"],
+                recommendations: "Keep up the excellent security habits! Consider using a password manager to make your secure passwords even more memorable. Enable two-factor authentication everywhere possible."
+            },
+            "Pragmatist": {
+                emoji: "⚙️",
+                title: "The Pragmatist",
+                description: "You balance security with practicality. You understand the importance of passwords but also appreciate convenience and usability. You make smart choices based on context.",
+                traits: ["Balanced", "Practical", "Adaptive", "Smart", "Flexible"],
+                recommendations: "Your balanced approach is great! Enhance it by using a password manager for complex sites and memorable patterns for less-critical services. Enable 2FA on important accounts."
+            },
+            "Adventurer": {
+                emoji: "🎨",
+                title: "The Adventurer",
+                description: "You're creative with passwords and enjoy finding unique solutions. You think outside the box and may take calculated risks with your digital identity.",
+                traits: ["Creative", "Innovative", "Independent", "Confident", "Experimental"],
+                recommendations: "Your creativity is valuable! Channel it into creating memorable yet secure passwords. Use a password manager to track your creations and add an extra security layer with 2FA."
+            },
+            "Tech-Savvy": {
+                emoji: "🚀",
+                title: "The Tech-Savvy",
+                description: "You embrace technology and modern solutions to password management. You're likely using advanced security tools and understand the landscape deeply.",
+                traits: ["Tech Enthusiast", "Forward-Thinking", "Efficient", "Security-Aware", "Modern"],
+                recommendations: "Your tech approach is excellent! Consider implementing passwordless authentication where available. Stay updated with the latest security practices and consider security certifications."
+            }
+        };
+
+        // Quiz State
+        let currentQuestion = 0;
+        let answers = [];
+        const totalQuestions = quizData.length;
+
+        // Initialize Quiz
+        function initQuiz() {
+            answers = new Array(totalQuestions).fill(-1);
+            currentQuestion = 0;
+            document.getElementById('totalQuestions').textContent = totalQuestions;
+            displayQuestion();
+        }
+
+        // Display Question
+        function displayQuestion() {
+            const question = quizData[currentQuestion];
+            document.getElementById('questionText').textContent = question.question;
+            document.getElementById('questionNumber').textContent = currentQuestion + 1;
+
+            // Display Options
+            const optionsList = document.getElementById('optionsList');
+            optionsList.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'option-btn';
+                button.textContent = option;
+                if (answers[currentQuestion] === index) {
+                    button.classList.add('selected');
+                }
+                button.onclick = () => selectOption(index);
+                optionsList.appendChild(button);
+            });
+
+            // Update Progress
+            updateProgress();
+            updateButtons();
+        }
+
+        // Select Option
+        function selectOption(index) {
+            answers[currentQuestion] = index;
+            document.querySelectorAll('.option-btn').forEach((btn, i) => {
+                btn.classList.toggle('selected', i === index);
+            });
+            updateButtons();
+        }
+
+        // Update Progress Bar
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / totalQuestions) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressPercent').textContent = Math.round(progress) + '%';
+        }
+
+        // Update Buttons
+        function updateButtons() {
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            document.getElementById('nextBtn').disabled = answers[currentQuestion] === -1;
+            
+            if (currentQuestion === totalQuestions - 1 && answers[currentQuestion] !== -1) {
+                document.getElementById('nextBtn').textContent = 'See Results →';
+            } else {
+                document.getElementById('nextBtn').textContent = 'Next →';
+            }
+        }
+
+        // Next Question
+        function nextQuestion() {
+            if (currentQuestion < totalQuestions - 1) {
+                currentQuestion++;
+                displayQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        // Previous Question
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                displayQuestion();
+            }
+        }
+
+        // Calculate Personality Type
+        function calculatePersonality() {
+            let scores = {
+                Guardian: 0,
+                Pragmatist: 0,
+                Adventurer: 0,
+                "Tech-Savvy": 0
+            };
+
+            // Scoring Logic
+            const answer0 = answers[0]; // How do you create passwords?
+            const answer1 = answers[1]; // Faced with rule?
+            const answer2 = answers[2]; // Change frequency?
+            const answer3 = answers[3]; // Recovery method?
+            const answer4 = answers[4]; // Complexity preference?
+            const answer5 = answers[5]; // Password sharing?
+            const answer6 = answers[6]; // Frustration?
+            const answer7 = answers[7]; // Security level?
+            const answer8 = answers[8]; // Biometric auth?
+            const answer9 = answers[9]; // Philosophy?
+
+            // Question 0: How do you create passwords?
+            if (answer0 === 0) scores["Tech-Savvy"] += 2;
+            if (answer0 === 1) scores["Pragmatist"] += 2;
+            if (answer0 === 2) scores["Adventurer"] += 2;
+            if (answer0 === 3) scores["Tech-Savvy"] += 2;
+
+            // Question 1: Faced with rule?
+            if (answer1 === 0) scores["Guardian"] += 2;
+            if (answer1 === 1) scores["Adventurer"] += 2;
+            if (answer1 === 2) scores["Pragmatist"] += 2;
+            if (answer1 === 3) scores["Adventurer"] += 2;
+
+            // Question 2: Change frequency?
+            if (answer2 === 0) scores["Guardian"] += 2;
+            if (answer2 === 1) scores["Pragmatist"] += 2;
+            if (answer2 === 2) scores["Adventurer"] += 1;
+            if (answer2 === 3) scores["Pragmatist"] += 1;
+
+            // Question 3: Recovery method?
+            if (answer3 === 0) scores["Pragmatist"] += 1;
+            if (answer3 === 1) scores["Guardian"] += 2;
+            if (answer3 === 2) scores["Tech-Savvy"] += 2;
+            if (answer3 === 3) scores["Pragmatist"] += 1;
+
+            // Question 4: Complexity?
+            if (answer4 === 0) scores["Pragmatist"] += 2;
+            if (answer4 === 1) scores["Guardian"] += 1;
+            if (answer4 === 2) scores["Tech-Savvy"] += 2;
+            if (answer4 === 3) scores["Tech-Savvy"] += 1;
+
+            // Question 5: Sharing?
+            if (answer5 === 0) scores["Guardian"] += 2;
+            if (answer5 === 1) scores["Pragmatist"] += 2;
+            if (answer5 === 2) scores["Tech-Savvy"] += 1;
+            if (answer5 === 3) scores["Tech-Savvy"] += 2;
+
+            // Question 6: Frustration?
+            if (answer6 === 0) scores["Pragmatist"] += 2;
+            if (answer6 === 1) scores["Guardian"] += 1;
+            if (answer6 === 2) scores["Adventurer"] += 1;
+            if (answer6 === 3) scores["Tech-Savvy"] += 2;
+
+            // Question 7: Security level?
+            if (answer7 === 0) scores["Guardian"] += 2;
+            if (answer7 === 1) scores["Pragmatist"] += 2;
+            if (answer7 === 2) scores["Adventurer"] += 2;
+            if (answer7 === 3) scores["Tech-Savvy"] += 2;
+
+            // Question 8: Biometric?
+            if (answer8 === 0) scores["Tech-Savvy"] += 2;
+            if (answer8 === 1) scores["Pragmatist"] += 2;
+            if (answer8 === 2) scores["Guardian"] += 2;
+            if (answer8 === 3) scores["Pragmatist"] += 2;
+
+            // Question 9: Philosophy?
+            if (answer9 === 0) scores["Guardian"] += 2;
+            if (answer9 === 1) scores["Pragmatist"] += 2;
+            if (answer9 === 2) scores["Adventurer"] += 2;
+            if (answer9 === 3) scores["Tech-Savvy"] += 2;
+
+            // Find highest score
+            let maxScore = 0;
+            let personalityType = "Guardian";
+            for (let type in scores) {
+                if (scores[type] > maxScore) {
+                    maxScore = scores[type];
+                    personalityType = type;
+                }
+            }
+
+            return personalityType;
+        }
+
+        // Show Results
+        function showResults() {
+            const personalityType = calculatePersonality();
+            const personality = personalityTypes[personalityType];
+
+            document.getElementById('resultEmoji').textContent = personality.emoji;
+            document.getElementById('resultTitle').textContent = personality.title;
+            document.getElementById('resultDescription').textContent = personality.description;
+
+            const traitsList = document.getElementById('traitsList');
+            traitsList.innerHTML = personality.traits.map(trait => 
+                `<div class="trait">${trait}</div>`
+            ).join('');
+
+            document.getElementById('recommendations').textContent = personality.recommendations;
+
+            document.getElementById('quizScreen').classList.add('hidden');
+            document.getElementById('resultsScreen').classList.add('show');
+        }
+
+        // Restart Quiz
+        function restartQuiz() {
+            document.getElementById('quizScreen').classList.remove('hidden');
+            document.getElementById('resultsScreen').classList.remove('show');
+            initQuiz();
+        }
+
+        // Start Quiz on Load
+        window.onload = initQuiz;
+    </script>
+</body>
+</html>
